@@ -1,0 +1,14 @@
+body{
+	font-family: cursive;
+	background-color: black;
+}
+
+#app {
+	margin: 0 auto;
+	text-align: center;
+	color: white;
+	padding: 20px;
+	border-style: dashed;
+	border-color: white;
+	width: 500px;
+}
