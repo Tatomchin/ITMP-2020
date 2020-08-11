@@ -18,6 +18,8 @@
 		<h4
 		v-for="i in toInt"
 		>{{num}} x {{i}} = {{multi(i)}}</h4>
+		<h3>ผมรวมของผลลัพธ์ของสูตรคูณ</h3>
+		<h2>{{summary}}</h2>
 		
 	</div>
 
@@ -28,6 +30,7 @@
 				num: 2,
 				row: 12,
 				before_num: 1,
+				
 			},
 			methods: {
 				multi: function(ee){// function() 
@@ -38,6 +41,15 @@
 				toInt: function(){
 					return parseInt(this.row)
 				},
+
+				summary: function(){
+					out = 0
+					for (let d = 1; d <= this.row; d++) {
+						out += this.num*d
+					}
+					return out
+				},
+
 				x2: function(){
 					return this.num*2
 				},
