@@ -8,30 +8,57 @@
 </head>
 <body>
 	<div id="app">
-		
+		<h2>Detail</h2>
+		<h4>name : {{person.name}}</h4>
+		<h4>email : {{person.email}}</h4>
+		<h4>company : {{person.company.name}}</h4>
+		<h2>List</h2>
+		<h3 v-for="u in users" :data-id="u.id" @click="ShowOne(u)">{{u.username}}</h3>
 	</div>
 	
 
 	<script>
 		fetch('https://jsonplaceholder.typicode.com/users')
 		.then(response => response.json())
-		.then(json => {console.log(json)})
+		.then(json => {
+			console.log(json)
+			app.users = json
+			app.person = json[0]
+			}
+		)
 		let app = new Vue({
 			el: '#app',
+			methods: {
+				ShowOne: function(user){
+					this.person = user
+				}
+			},
 			data: {
-				users :[],
-				person:{
-					id:0,
+				users : [
+					{
+						id:1,
+						name:'..loading',
+						username:'..loading',
+						email:'..loading',
+						website:'..loading',
+						company:{
+							name : '..loading'
+						}
+						
+					}
+						],
+				person : {
+					id:1,
 					name:'..loading',
 					username:'..loading',
 					email:'..loading',
 					website:'..loading',
 					company:{
-						name : '..loading',
+						name : '..loading'
+						}
 					}
 				}	
-			}
-		})
+			})
 
 	</script>
 </body>
