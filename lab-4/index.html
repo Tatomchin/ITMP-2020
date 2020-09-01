@@ -6,11 +6,13 @@
 	<link rel="stylesheet" type="text/css" href="lab.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
-<body>
+<body onload="loopMain()">
 	<div id="canvas">
+		<div id="alertTime">หมดเวลาละเว้ย</div>
+		<div id="alert2"> เอาแล่วๆๆๆๆๆ ดูดีๆ</div>
 		<section id="canvas_header">
 			<div>
-				เหลือเวลา {{time}} วินาที
+				<h2>เหลือเวลา {{time}} วินาที</h2>
 			</div>
 		</section>
 		<section id="canvas_main">
@@ -30,12 +32,15 @@
 			<div>
 				{{score}} คะแนน
 			</div>
+			<div id='restart' @click="restart()">
+				เริ่มใหม่สิ
+			</div>
 		</section>
 	</div>
 
 	<script>
-		let picklight = "20%" //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
-		document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
+		let picklight = ["10%",'20%','25%','60%','70%'] //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
+		//document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
 
 		function rand(start,stop){//สร้างฟังก์ชัน random ไว้ใช้
 			let shift = (stop-start)+1
@@ -47,29 +52,127 @@
 			data:{
 				row:2, //จำนวนแถวที่จะมีในรอบนี้
 				h:250, // hue ในรอบนี้
-				time:20, //เวลาเริ่มต้น
+				time:2, //เวลาเริ่มต้น
 				score:0, //คะแนนเริ่มต้น
-				pick:1, //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
+				pick:rand(1,4), //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
 				l:40,//ความสว่างของสีทั่วไปในรอบนี้
+
+				baseRow:2,
+				rowRand:4,
+				getRand:0,
 			},
 			methods: {
 				check : function(i){
-					console.log(i)
+					//Check ว่าจิ้มถูกมั้ย
+					if(this.time != 0){
+						
+
+						console.log(i == this.pick)
+						if (i == this.pick){
+							this.score++
+							this.correct()
+							let cc = picklight[rand(0,4)]
+							document.querySelector('#canvas').style.setProperty('--picklight',cc)
+
+							if(cc.localeCompare(picklight[3]) == 0 && this.rowRand > 24){
+								document.getElementById('alert2').style.visibility ='visible';
+								console.log('อันนี้ยาก มั้ย ?');
+							}
+							else{
+								document.getElementById('alert2').style.visibility ='hidden';
+							}
+
+
+							if(this.score >= 10 && this.score < 20){
+								this.rowRand = 8
+								this.time += 0.5					
+								}
+							else if(this.score >= 20 && this.score < 30){
+									this.baseRow = 8
+									this.rowRand = 16
+									this.time += 0.75
+								}
+							else if(this.score >= 30 && this.score < 40){
+									this.baseRow = 16
+									this.rowRand = 32
+									this.time += 1
+								}
+
+							else{
+								this.time += 0.5
+								this.rowRand = 4
+							}
+
+						}
+						else{
+							if(this.score == 0){
+								this.score = 0
+							}
+							else{
+								this.score--
+							}
+						}
+					}
+					else{
+
+					}
+					
+
+					
+					
+
 					//console.log(e.target.dataset.pick)
 					//ส่ง i มา จาก click
+				},
+
+				correct: function(){
+					//ไปด่านต่อไป
+
+					this.getRand = rand(this.baseRow,this.rowRand)
+					this.row = this.getRand
+					this.pick = rand(1,(this.getRand*this.getRand))
+					this.h = rand(1,360)
+				
+				},
+
+				restart: function(){
+					this.row = 2, //จำนวนแถวที่จะมีในรอบนี้
+					this.h = 250, // hue ในรอบนี้
+					this.time = 20, //เวลาเริ่มต้น
+					this.score = 0, //คะแนนเริ่มต้น
+					this.pick = rand(1,4), //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
+					this.l = 40,//ความสว่างของสีทั่วไปในรอบนี้
+
+					this.baseRow = 2,
+					this.rowRand = 4,
+					this.getRand = 0,
+
+					document.getElementById('alertTime').style.visibility ='hidden';
+					document.getElementById('restart').style.visibility ='hidden';
 				}
 			}
 		})
 		//ทำให้แคนวาสมี --picklight ตามที่กำหนดไว้ข้างบนนี้
-		document.querySelector('#canvas').style.setProperty('--picklight',picklight);
+		document.querySelector('#canvas').style.setProperty('--picklight',picklight[0]);
 		
-		let counter = setInterval(()=>{
-			if (app.time>0) {
-				app.time--
-			}else{
+		function loopMain(){
+				let counter = setInterval(()=>{
+				if (app.time>0) {
+					app.time--
+					if(app.time <= 0){
+						app.time = 0
+						
+						document.getElementById('alertTime').style.visibility ='visible';
+						document.getElementById('restart').style.visibility ='visible';
+						//console.log(s)
+					}
+				}else{
 				clearInterval(counter)
-			}
-		},1000);
+
+				}
+			},1000);
+		}
+		
 	</script>
 </body>
 </html>
