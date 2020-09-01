@@ -9,13 +9,14 @@
 <body onload="loopMain()">
 	<div id="canvas">
 		<div id="alertTime">หมดเวลาละเว้ย</div>
-		<div id="alert2"> เอาแล่วๆๆๆๆๆ ดูดีๆ</div>
+		<div id="alert2"> เอาแล่วๆๆๆๆๆ ดูดีๆ +5 วิ</div>
 		<section id="canvas_header">
 			<div>
 				<h2>เหลือเวลา {{time}} วินาที</h2>
 			</div>
 		</section>
 		<section id="canvas_main">
+			
 			<main>
 				<a-dot v-for="i in row*row"
 				:style="{'--row':row,
@@ -74,9 +75,10 @@
 							let cc = picklight[rand(0,4)]
 							document.querySelector('#canvas').style.setProperty('--picklight',cc)
 
-							if(cc.localeCompare(picklight[3]) == 0 && this.rowRand > 24){
+							if(cc.localeCompare(picklight[3]) == 0 && this.rowRand >= 20){
 								document.getElementById('alert2').style.visibility ='visible';
 								console.log('อันนี้ยาก มั้ย ?');
+								this.time += 5
 							}
 							else{
 								document.getElementById('alert2').style.visibility ='hidden';
@@ -149,6 +151,8 @@
 
 					document.getElementById('alertTime').style.visibility ='hidden';
 					document.getElementById('restart').style.visibility ='hidden';
+					document.getElementById('alert2').style.visibility ='hidden';
+					loopMain()
 				}
 			}
 		})
