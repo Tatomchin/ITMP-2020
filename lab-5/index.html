@@ -10,7 +10,7 @@
 	<div id="canvas">
 		<section id="canvas_header">
 			<div>
-				คะแนนครับ {{score}}
+				คะแนนที่ได้ {{score}} ครับ
 			</div>
 		</section>
 		<section id="canvas_main" 
@@ -63,7 +63,7 @@
 				],
 
 				countF:2,
-				level:[20,15,7],
+				level:[15,10,6],
 				chance:0,
 			},
 			methods : {
@@ -77,13 +77,13 @@
 						this.isRightArrow = 1
 					}
 					
-					console.log(this.isRightArrow)
+					
 				},
 			},
 			computed:{},
 			watch:{
 				time: function(x){
-
+					console.log(x)
 					if(x > 5 && x <= 10){
 						this.chance = rand(0,this.level[0])
 						if(this.chance < 5){
@@ -92,14 +92,14 @@
 					}
 
 					if(x > 10 && x <= 15){
-						rand(0,this.level[1])
+						this.chance = rand(0,this.level[1])
 						if(this.chance < 5){
 							this.fruits.push({id:this.countF++,type:col[rand(0,1)],pst:0,run:true,step:1})
 						}
 					}
 
-					if(x > 20){
-						rand(0,this.level[2])
+					if(x > 15){
+						this.chance = rand(0,this.level[2])
 						if(this.chance < 5){
 							this.fruits.push({id:this.countF++,type:col[rand(0,1)],pst:0,run:true,step:1})
 						}
@@ -123,7 +123,7 @@
 							else{
 								this.fruits[f].step = 1;
 							}
-							console.log(this.fruits[0].step)
+							
 
 							if(this.fruits[f].pst == 12){
 								this.fruits[f].run = false
@@ -147,7 +147,7 @@
 							}
 							
 						}
-						//console.log(this.fruits[f].pst)
+						
 					}
 				}
 			}
