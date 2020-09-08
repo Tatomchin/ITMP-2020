@@ -45,6 +45,7 @@
 			return Math.floor(Math.random()*100%shift)+start
 		}
 		
+		let col = ['red','yellow']
 		let fruitCount = 3
 		let isRightArrow = 1
 		let speed = 1000
@@ -57,11 +58,13 @@
 				isRightArrow:isRightArrow,
 				speed:speed,
 				fruits:[
-					{id:1,type:'red',pst:6,run:true,step:1},
-					{id:2,type:'yellow',pst:3,run:true,step:1},
+					{id:1,type:col[0],pst:5,run:true,step:1},
+					{id:2,type:col[1],pst:3,run:true,step:1},
 				],
 
-				runUp:3,
+				countF:2,
+				level:[20,15,7],
+				chance:0,
 			},
 			methods : {
 				color_tog : function() {
@@ -80,6 +83,30 @@
 			computed:{},
 			watch:{
 				time: function(x){
+
+					if(x > 5 && x <= 10){
+						this.chance = rand(0,this.level[0])
+						if(this.chance < 5){
+							this.fruits.push({id:this.countF++,type:col[rand(0,1)],pst:0,run:true,step:1})
+						}
+					}
+
+					if(x > 10 && x <= 15){
+						rand(0,this.level[1])
+						if(this.chance < 5){
+							this.fruits.push({id:this.countF++,type:col[rand(0,1)],pst:0,run:true,step:1})
+						}
+					}
+
+					if(x > 20){
+						rand(0,this.level[2])
+						if(this.chance < 5){
+							this.fruits.push({id:this.countF++,type:col[rand(0,1)],pst:0,run:true,step:1})
+						}
+					}
+
+					
+
 					let count = this.fruits.length
 					for(let f in this.fruits){
 						let run = this.fruits[f].run
@@ -100,7 +127,7 @@
 
 							if(this.fruits[f].pst == 12){
 								this.fruits[f].run = false
-								if(this.fruits[f].type == "red"){
+								if(this.fruits[f].type.localeCompare("red") == 0){
 									this.score++
 								}
 								else{
@@ -110,7 +137,7 @@
 							}
 							if(this.fruits[f].pst == 16){
 								this.fruits[f].run = false
-								if(this.fruits[f].type == "yellow"){
+								if(this.fruits[f].type.localeCompare("yellow") == 0){
 									this.score++
 								}
 								else{
@@ -118,6 +145,7 @@
 									this.play = false
 								}
 							}
+							
 						}
 						//console.log(this.fruits[f].pst)
 					}
