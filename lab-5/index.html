@@ -59,7 +59,9 @@
 				fruits:[
 					{id:1,type:'red',pst:6,run:true,step:1},
 					{id:2,type:'yellow',pst:3,run:true,step:1},
-				]
+				],
+
+				runUp:3,
 			},
 			methods : {
 				color_tog : function() {
@@ -82,12 +84,39 @@
 					for(let f in this.fruits){
 						let run = this.fruits[f].run
 						if(run){
-							this.fruits[f].pst++
+							this.fruits[f].pst += this.fruits[f].step
+							if(this.fruits[f].pst >= 10){
+								if(this.isRightArrow == 1){
+									this.fruits[f].step = 3;
+								}
+								else{
+									this.fruits[f].step = 1;
+								}
+							}
+							else{
+								this.fruits[f].step = 1;
+							}
+							console.log(this.fruits[0].step)
+
 							if(this.fruits[f].pst == 12){
 								this.fruits[f].run = false
+								if(this.fruits[f].type == "red"){
+									this.score++
+								}
+								else{
+									//END
+									this.play = false
+								}
 							}
 							if(this.fruits[f].pst == 16){
 								this.fruits[f].run = false
+								if(this.fruits[f].type == "yellow"){
+									this.score++
+								}
+								else{
+									//END
+									this.play = false
+								}
 							}
 						}
 						//console.log(this.fruits[f].pst)
@@ -97,7 +126,10 @@
 		})
 
 		let playing = setInterval(function(){
-			app.time++
+			if(app.play == true){
+				app.time++
+			}
+			
 		},speed)
 	</script>
 </body>
