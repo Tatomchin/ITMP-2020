@@ -7,13 +7,22 @@
 	<link rel="stylesheet" type="text/css" href="lab.css">
 </head>
 <body>
-	<div id="app">
+	<div id="app" onload="ranDogJS()">
 		<h2>Detail</h2>
 		<h4>name : {{person.name}}</h4>
 		<h4>email : {{person.email}}</h4>
 		<h4>company : {{person.company.name}}</h4>
 		<h2>List</h2>
-		<h3 v-for="u in users" :data-id="u.id" @click="ShowOne(u)">{{u.username}}</h3>
+		<h3 v-for="u in users" :data-id="u.id" >
+		{{u.username}}
+		</h3>
+
+		<div @click="ranDog()" id="btnDog" >
+			Click Me For a New dog !
+		</div>
+		<div id="picDog">
+			
+		</div>
 	</div>
 	
 
@@ -21,32 +30,40 @@
 		fetch('https://jsonplaceholder.typicode.com/users')
 		.then(response => response.json())
 		.then(json => {
-			console.log(json)
+			// console.log(json)
 			app.users = json
 			app.person = json[0]
 			}
 		)
+		fetch('https://dog.ceo/api/breeds/image/random')
+		.then(response => response.json())
+		.then(json => {
+			
+			app.message = json.message
+			document.getElementById("picDog").innerHTML  = "<img src=\""+app.message+"\">"
+			console.log(app.message)
+			}
+		)
+
 		let app = new Vue({
 			el: '#app',
 			methods: {
 				ShowOne: function(user){
 					this.person = user
+				},
+				ranDog: function(){
+					fetch('https://dog.ceo/api/breeds/image/random')
+					.then(response => response.json())
+					.then(json => {
+					app.message = json.message
+					document.getElementById("picDog").innerHTML  = "<img src=\""+app.message+"\">"
+					console.log(app.message)
+					}
+					)
 				}
 			},
 			data: {
-				users : [
-					{
-						id:1,
-						name:'..loading',
-						username:'..loading',
-						email:'..loading',
-						website:'..loading',
-						company:{
-							name : '..loading'
-						}
-						
-					}
-						],
+				users : [],
 				person : {
 					id:1,
 					name:'..loading',
@@ -56,9 +73,11 @@
 					company:{
 						name : '..loading'
 						}
-					}
+					},
+				message : "",
 				}	
 			})
+		
 
 	</script>
 </body>
